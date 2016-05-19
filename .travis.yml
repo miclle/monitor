@@ -8,7 +8,7 @@ go:
 
 sudo: false
 
-before_install:
+install:
   - go get github.com/stretchr/testify/assert
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/axw/gocov/gocov
@@ -16,14 +16,17 @@ before_install:
   - go get github.com/mattn/goveralls
   - go get github.com/satori/go.uuid
 
-install:
-  - cd $TRAVIS_BUILD_DIR
-  - echo "TODO: make"
+# install:
+#   - cd $TRAVIS_BUILD_DIR
+#   - make
 
 script:
   - cd $TRAVIS_BUILD_DIR
 
   - go test -coverprofile=logger.coverprofile ./detector
+  - go test -coverprofile=logger.coverprofile ./services
+  - go test -coverprofile=logger.coverprofile ./util
+  - go test -coverprofile=logger.coverprofile ./xlog
   - go test -coverprofile=main.coverprofile
 
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/gover
