@@ -27,7 +27,7 @@ script:
   - go test -coverprofile=logger.coverprofile ./services
   - go test -coverprofile=logger.coverprofile ./util
   - go test -coverprofile=logger.coverprofile ./xlog
-  - go test -coverprofile=main.coverprofile
+  # - go test -coverprofile=main.coverprofile
 
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/gover
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
