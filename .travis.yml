@@ -14,10 +14,11 @@ before_install:
   - go get github.com/axw/gocov/gocov
   - go get github.com/modocache/gover
   - go get github.com/mattn/goveralls
+  - go get github.com/satori/go.uuid
 
 install:
   - cd $TRAVIS_BUILD_DIR
-  - go get
+  - echo "TODO: make"
 
 script:
   - cd $TRAVIS_BUILD_DIR
