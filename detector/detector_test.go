@@ -3,6 +3,7 @@ package detector
 import (
 	"log"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -19,12 +20,14 @@ var delivery = func(l Logger, start, end time.Time, req *http.Request, resp *htt
 		code = resp.StatusCode
 	}
 
-	log.Printf("Probe Github API: %s, StatusCode: %d, latency: %13v", req.URL.String(), code, latency)
+	log.Printf("Probe HTTP GET:%s, StatusCode: %d, latency: %13v", req.URL.String(), code, latency)
 }
 
-func TestProbeGithubAPI(t *testing.T) {
+func TestProbeBasicAuthGet(t *testing.T) {
 	assert := assert.New(t)
-	assert.NotNil(delivery)
-	url := "https://api.github.com"
-	ProbeGet(delivery, url)
+	username := os.Getenv("BASIC_AUTH_USERNAME")
+	password := os.Getenv("BASIC_AUTH_PASSWORD")
+
+	assert.NotEmpty(username, "BASIC_AUTH username must require")
+	assert.NotEmpty(password, "BASIC_AUTH password must require")
 }
