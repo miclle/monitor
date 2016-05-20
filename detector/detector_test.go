@@ -1,4 +1,4 @@
-package services
+package detector
 
 import (
 	"log"
@@ -6,11 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/miclle/observer/detector"
 	"github.com/stretchr/testify/assert"
 )
 
-var delivery = func(l detector.Logger, start, end time.Time, req *http.Request, resp *http.Response, err error) {
+var delivery = func(l Logger, start, end time.Time, req *http.Request, resp *http.Response, err error) {
 
 	latency := end.Sub(start)
 
@@ -26,5 +25,6 @@ var delivery = func(l detector.Logger, start, end time.Time, req *http.Request, 
 func TestProbeGithubAPI(t *testing.T) {
 	assert := assert.New(t)
 	assert.NotNil(delivery)
-	ProbeGithubAPI(delivery)
+	url := "https://api.github.com"
+	ProbeGet(delivery, url)
 }
