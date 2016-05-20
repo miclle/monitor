@@ -5,10 +5,6 @@ go:
 
 sudo: false
 
-env:
-  global:
-    secure: R+Y/LbOXr+RmP3e1Dxn2zpDeY7mufxTITVKYH/oaquYEJnFjswg7ZGavDDbUS0NyweDFFy2RmHevrRPGxcNQp0ZMeVR5aaKtf81I3WLOTBt699yLmLeDrbY0j19Rws1QJ6G/V1unGRyhmbsesuNWyyD6XS68HxojXkVltkNxHYDr4GEzl+BNatwhLHGw07uKQ50pPj/3mw4N80X06eZeXBlJh5BffQbNOF1PMiTvz+i8FTtoK0Z06R9k4NzQL6y4PC3PB46LilvNdgFg9VbE6IdCy7aH63jTckM0WSw44oto5wu75JFCu5a1Aqjk68zh9FwZPagzdTnCcEN+TQnjBKxwfv6stSUsmhrIvStiH0vJgMqZuu4SHKU9XEf9Xo+Ng3MBf3txpAQRpbiRn4ychgVzquD70yAszViXc8m6WNTjgtx029L3E4udnWor2p1GFHsLdk7nKG47FB6wnrnR2naO+nUmGMY7gFG4EeqTLzODiwxrsc21wLKYzkmdJao2ECWCmccuy31gol/otu4d+9aWgDInAWgin6rr746UuOLc6O4Q9/YqUMYFs+V1hFkzWWc+c4nfDBqsYOoPNf0B0OUL4w6scXO3HmECTP7GNQ+MgQQBfy5nTXjMBsSCnzTkCfXjYQkYWE54ekGT3oVMv2aNMSyGFpT1ImNoUDT5glQ=
-
 install:
   - go get github.com/stretchr/testify/assert
   - go get golang.org/x/tools/cmd/cover
@@ -16,10 +12,6 @@ install:
   - go get github.com/modocache/gover
   - go get github.com/mattn/goveralls
   - go get github.com/satori/go.uuid
-
-# install:
-#   - cd $TRAVIS_BUILD_DIR
-#   - make
 
 script:
   - cd $TRAVIS_BUILD_DIR
