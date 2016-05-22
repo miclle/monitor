@@ -12,6 +12,7 @@ install:
   - go get github.com/modocache/gover
   - go get github.com/mattn/goveralls
   - go get github.com/satori/go.uuid
+  - go get gopkg.in/mgo.v2/bson
 
 script:
   - cd $TRAVIS_BUILD_DIR
