@@ -12,14 +12,16 @@ install:
   - go get github.com/modocache/gover
   - go get github.com/mattn/goveralls
   - go get github.com/satori/go.uuid
-  - go get gopkg.in/mgo.v2/bson
+  - go get gopkg.in/mgo.v2
 
 script:
   - cd $TRAVIS_BUILD_DIR
 
+  - go test -coverprofile=logger.coverprofile ./xlog
   - go test -coverprofile=logger.coverprofile ./detector
   - go test -coverprofile=logger.coverprofile ./util
-  - go test -coverprofile=logger.coverprofile ./xlog
+  - go test -coverprofile=logger.coverprofile ./util/mgoutil
+  - go test -coverprofile=logger.coverprofile ./mgr
   # - go test -coverprofile=main.coverprofile
 
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/gover
