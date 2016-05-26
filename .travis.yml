@@ -20,13 +20,8 @@ services:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-
-  - go test -coverprofile=logger.coverprofile ./xlog
-  - go test -coverprofile=logger.coverprofile ./detector
-  - go test -coverprofile=logger.coverprofile ./util
-  - go test -coverprofile=logger.coverprofile ./util/mgoutil
-  - go test -coverprofile=logger.coverprofile ./mgr
-  # - go test -coverprofile=main.coverprofile
+  - make
+  - make test
 
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/gover
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN

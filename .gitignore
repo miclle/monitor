@@ -22,3 +22,30 @@ _testmain.go
 *.exe
 *.test
 *.prof
+.idea
+
+bin
+gin-bin
+
+# Mac OSX
+.DS_Store
+
+node_modules
+bower_components
+
+# website
+website/dist
+
+npm-debug.log
+.bowerrc
+.editorconfig
+.jshintrc
+
+.sass-cache/
+.tmp/
+dist/
+public/
+test.sh
+.cover
+coverage.html
+coverage.xml
