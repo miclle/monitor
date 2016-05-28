@@ -11,16 +11,13 @@ install:
   - go get github.com/axw/gocov/gocov
   - go get github.com/modocache/gover
   - go get github.com/mattn/goveralls
-  - go get github.com/satori/go.uuid
-  - go get gopkg.in/mgo.v2
-  - go get gopkg.in/robfig/cron.v2
+  - go get -u github.com/mitchellh/gox
 
 services:
   - mongodb
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - make install
   - make build
   - make test
 
