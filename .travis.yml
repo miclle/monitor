@@ -20,7 +20,8 @@ services:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - make
+  - make install
+  - make build
   - make test
 
 after_success:
