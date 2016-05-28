@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/miclle/observer/detector"
 	"github.com/stretchr/testify/assert"
-	"observer.miclle.com/detector"
 )
 
 // ---------------------------------------------------------------------------

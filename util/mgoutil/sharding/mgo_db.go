@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/miclle/observer/util/mgoutil"
 	"gopkg.in/mgo.v2"
-	"observer.miclle.com/util/mgoutil"
 )
 
 // Config sharding mgo configuration

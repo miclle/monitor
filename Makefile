@@ -3,24 +3,18 @@ VERSION := $(shell git describe --tags)
 DIST_DIRS := find * -type d -exec
 
 build:
-	cd src; CGO_ENABLED=0 go install -ldflags "-X main.version=${VERSION}" -v ./observer.miclle.com/...
+	CGO_ENABLED=0 go install -ldflags "-X main.version=${VERSION}" -v ./...
 
-# 安装开发环境
 install:
-	go get github.com/codegangsta/gin
-
+	go get ./...
 
 clean:
-	cd src; go clean -i ./observer.miclle.com/...; cd ..; rm -rf pkg bin
-	find ./src -name '*.git*' | xargs rm -rf
-	find ./src -name '.travis.yml' | xargs rm -rf
-	find ./src -name 'gin-bin' | xargs rm -rf
+	go clean -i ./...
+	rm -rf pkg bin
 
-# 检验代码风格
 style:
-	go vet ./src/observer.miclle.com/...
+	go vet ./...
 
-# 测试
 test:
 	go get github.com/axw/gocov/gocov
 	go get github.com/AlekSi/gocov-xml
@@ -28,6 +22,3 @@ test:
 	rm -rf coverage.html coverage.xml
 	sh coverage.sh --html
 
-# 启动后端服务
-dev: clean-backend
-	cd ./src/observer.miclle.com/app; gin -p '9000' -a '9090'

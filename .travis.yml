@@ -20,7 +20,6 @@ services:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - source env.sh
   - make
   - make test
 

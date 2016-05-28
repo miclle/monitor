@@ -6,8 +6,8 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
-	"observer.miclle.com/detector"
-	"observer.miclle.com/util/mgoutil"
+	"github.com/miclle/observer/detector"
+	"github.com/miclle/observer/util/mgoutil"
 )
 
 // TaskMgr struct

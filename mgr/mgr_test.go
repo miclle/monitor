@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"observer.miclle.com/detector"
+	"github.com/miclle/observer/detector"
 )
 
 var taskMgr *TaskMgr

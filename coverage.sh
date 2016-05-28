@@ -36,7 +36,7 @@ generate_html_report(){
 
 
 
-generate_cover_data $(go list ./src/observer.miclle.com/...)
+generate_cover_data $(go list ./...)
     case "$1" in
         "")
            ;;
