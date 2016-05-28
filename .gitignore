@@ -49,3 +49,6 @@ test.sh
 .cover
 coverage.html
 coverage.xml
+
+# VS Code IDE
+.vscode
