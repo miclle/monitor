@@ -37,14 +37,15 @@ type Task struct {
 	Status      string        `bson:"status,omitempty"      json:"status"`
 
 	// HTTP Request args
-	URL         string              `bson:"url,omitempty"          json:"url"`
-	Protocol    string              `bson:"protocol,omitempty"     json:"protocol"`
-	Method      string              `bson:"method,omitempty"       json:"method"`
-	ContentType string              `bson:"content_type,omitempty" json:"content_type"`
-	UserAgent   string              `bson:"user_agent,omitempty"   json:"user_agent"`
-	Username    string              `bson:"username,omitempty"     json:"username"`
-	Password    string              `bson:"password,omitempty"     json:"password"`
-	Body        map[string][]string `bson:"body,omitempty"         json:"body"`
+	URL         string                 `bson:"url,omitempty"          json:"url"`
+	Protocol    string                 `bson:"protocol,omitempty"     json:"protocol"`
+	Method      string                 `bson:"method,omitempty"       json:"method"`
+	ContentType string                 `bson:"content_type,omitempty" json:"content_type"`
+	UserAgent   string                 `bson:"user_agent,omitempty"   json:"user_agent"`
+	Username    string                 `bson:"username,omitempty"     json:"username"`
+	Password    string                 `bson:"password,omitempty"     json:"password"`
+	Body        map[string]interface{} `bson:"body,omitempty"         json:"body"`
+	BodyForm    map[string][]string    `bson:"body_form,omitempty"    json:"body_form"`
 
 	// HTTP Response results
 	LastStatusCode int           `bson:"last_status,omitempty"  json:"last_status"`
