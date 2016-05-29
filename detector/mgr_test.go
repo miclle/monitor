@@ -1,12 +1,10 @@
-package mgr
+package detector
 
 import (
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/miclle/observer/detector"
 )
 
 var taskMgr *TaskMgr
@@ -41,7 +39,7 @@ func TestList(t *testing.T) {
 func TestCreate(t *testing.T) {
 	assert := assert.New(t)
 
-	task := &detector.Task{
+	task := &Task{
 		Name:        "Sample task name",
 		Description: "Sample task description",
 		URL:         "Sample task url",
@@ -65,7 +63,7 @@ func TestCreate(t *testing.T) {
 func TestFind(t *testing.T) {
 	assert := assert.New(t)
 
-	args := &detector.TaskArgs{
+	args := &TaskArgs{
 		Name: "Sample task name",
 	}
 
@@ -74,7 +72,7 @@ func TestFind(t *testing.T) {
 	assert.NotNil(task)
 	assert.NotEmpty(task.ID.Hex())
 
-	args = &detector.TaskArgs{
+	args = &TaskArgs{
 		Name: "Not exsit task name",
 	}
 
@@ -85,7 +83,7 @@ func TestFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 	assert := assert.New(t)
 
-	args := &detector.TaskArgs{
+	args := &TaskArgs{
 		Name: "Sample task name",
 	}
 
@@ -105,7 +103,7 @@ func TestUpdate(t *testing.T) {
 func TestDelete(t *testing.T) {
 	assert := assert.New(t)
 
-	args := &detector.TaskArgs{
+	args := &TaskArgs{
 		Name: "Sample task name",
 	}
 

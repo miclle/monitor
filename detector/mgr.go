@@ -1,4 +1,4 @@
-package mgr
+package detector
 
 import (
 	"time"
@@ -6,7 +6,6 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/miclle/observer/detector"
 	"github.com/miclle/observer/util/mgoutil"
 )
 
@@ -36,17 +35,17 @@ func NewTaskMgr(host, name, mode string) (*TaskMgr, error) {
 }
 
 // List return a detector task instances array
-func (mgr *TaskMgr) List() (tasks []detector.Task, err error) {
+func (mgr *TaskMgr) List() (tasks []Task, err error) {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
-	tasks = make([]detector.Task, 0, 0)
+	tasks = make([]Task, 0, 0)
 	err = coll.Find(bson.M{}).All(&tasks)
 	return
 }
 
 // Create is create detector taks func
-func (mgr *TaskMgr) Create(task *detector.Task) error {
+func (mgr *TaskMgr) Create(task *Task) error {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
@@ -58,7 +57,7 @@ func (mgr *TaskMgr) Create(task *detector.Task) error {
 }
 
 // Find return a detector task instance
-func (mgr *TaskMgr) Find(args *detector.TaskArgs) (task detector.Task, err error) {
+func (mgr *TaskMgr) Find(args *TaskArgs) (task Task, err error) {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
@@ -77,7 +76,7 @@ func (mgr *TaskMgr) Find(args *detector.TaskArgs) (task detector.Task, err error
 }
 
 // Update is update task func
-func (mgr *TaskMgr) Update(task *detector.Task) error {
+func (mgr *TaskMgr) Update(task *Task) error {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 	task.UpdatedAt = time.Now().UTC()
@@ -85,7 +84,7 @@ func (mgr *TaskMgr) Update(task *detector.Task) error {
 }
 
 // Delete is remove task by name
-func (mgr *TaskMgr) Delete(args *detector.TaskArgs) error {
+func (mgr *TaskMgr) Delete(args *TaskArgs) error {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
