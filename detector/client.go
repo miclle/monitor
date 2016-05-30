@@ -15,6 +15,11 @@ var UserAgent = "Observer detector package"
 
 // --------------------------------------------------------------------
 
+// Delivery func after the completion of the request triggering method
+type Delivery func(l Logger, start, end time.Time, req *http.Request, resp *http.Response, err error)
+
+// --------------------------------------------------------------------
+
 // Client is HTTP Client
 type Client struct {
 	*http.Client
@@ -81,8 +86,8 @@ func (r Client) Delete(l Logger, url string) (resp *http.Response, err error) {
 	return r.Do(l, req)
 }
 
-// PostEx send http post request, no Content-Type set
-func (r Client) PostEx(l Logger, url string) (resp *http.Response, err error) {
+// Post send http post request, no Content-Type set
+func (r Client) Post(l Logger, url string) (resp *http.Response, err error) {
 
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
@@ -100,18 +105,6 @@ func (r Client) PostWith(l Logger, url1 string, bodyType string, body io.Reader,
 	}
 	req.Header.Set("Content-Type", bodyType)
 	req.ContentLength = int64(bodyLength)
-	return r.Do(l, req)
-}
-
-// PostWith64 send http post request
-func (r Client) PostWith64(l Logger, url1 string, bodyType string, body io.Reader, bodyLength int64) (resp *http.Response, err error) {
-
-	req, err := http.NewRequest("POST", url1, body)
-	if err != nil {
-		return
-	}
-	req.Header.Set("Content-Type", bodyType)
-	req.ContentLength = bodyLength
 	return r.Do(l, req)
 }
 
