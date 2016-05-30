@@ -44,8 +44,9 @@ type Task struct {
 	UserAgent   string                 `bson:"user_agent,omitempty"   json:"user_agent"`
 	Username    string                 `bson:"username,omitempty"     json:"username"`
 	Password    string                 `bson:"password,omitempty"     json:"password"`
-	Body        map[string]interface{} `bson:"body,omitempty"         json:"body"`
-	BodyForm    map[string][]string    `bson:"body_form,omitempty"    json:"body_form"`
+	BodyJSON    map[string]interface{} `bson:"body_json,omitempty"    json:"body_json"`
+	BodyForm    map[string]string      `bson:"body_form,omitempty"    json:"body_form"`
+	BodyRaw     string                 `bson:"body_raw,omitempty"     json:"body_raw"`
 
 	// HTTP Response results
 	LastStatusCode int           `bson:"last_status,omitempty"  json:"last_status"`
