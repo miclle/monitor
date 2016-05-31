@@ -103,7 +103,9 @@ func (r Client) PostWith(l Logger, url1 string, bodyType string, body io.Reader,
 	if err != nil {
 		return
 	}
-	req.Header.Set("Content-Type", bodyType)
+	if bodyType != "" {
+		req.Header.Set("Content-Type", bodyType)
+	}
 	req.ContentLength = int64(bodyLength)
 	return r.Do(l, req)
 }
