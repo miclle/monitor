@@ -2,10 +2,14 @@ package detector
 
 import (
 	"bytes"
+	"net/http"
 	"runtime/debug"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/miclle/observer/xlog"
 
 	"qiniupkg.com/x/log.v7"
 
@@ -71,6 +75,42 @@ type Job struct {
 
 	Next time.Time `json:"next"`
 	Prev time.Time `json:"prev"`
+}
+
+// Exec the task
+func (t *Task) Exec() (resp *http.Response, err error) {
+	client := &Client{
+		Client:   &http.Client{Transport: http.DefaultTransport},
+		Delivery: nil,
+	}
+
+	l := xlog.NewLogger()
+
+	switch t.Method {
+
+	case "HEAD":
+		resp, err = client.Head(l, t.URL)
+
+	case "GET":
+		resp, err = client.Get(l, t.URL)
+
+	case "DELETE":
+		resp, err = client.Delete(l, t.URL)
+
+	case "POST":
+		switch t.ContentType {
+		case "application/x-www-form-urlencoded":
+			data := make(map[string][]string)
+			for k, v := range t.BodyForm {
+				data[k] = []string{v}
+			}
+			resp, err = client.PostWithForm(l, t.URL, data)
+		default:
+			resp, err = client.PostWith(l, t.URL, t.ContentType, strings.NewReader(t.Body), len(t.Body))
+		}
+	}
+
+	return nil, nil
 }
 
 // JobStatusUpdate Update task cron job status
