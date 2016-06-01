@@ -1,32 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
-	"github.com/carlescere/scheduler"
+	"github.com/gin-gonic/gin"
+	"github.com/miclle/observer/detector"
+	"qiniupkg.com/x/log.v7"
 )
 
 func main() {
-	fmt.Println("Main execute at:\t", time.Now())
+	router := gin.Default()
 
-	scheduler.Every(5).Seconds().Run(func() {
-		fmt.Println("Execute every 5 seconds\t", time.Now())
+	host := "127.0.0.1:27017"
+	name := "observer_test"
+	mode := "strong"
+
+	detector.Init(host, name, mode)
+
+	// Monitor
+	router.GET("/tasks", func(c *gin.Context) {
+		tasks, err := detector.TaskMgr.List()
+
+		if err != nil {
+			log.Error(err.Error())
+			c.JSON(400, err)
+			c.Abort()
+			return
+		}
+		c.JSON(200, gin.H{"tasks": tasks})
 	})
 
-	scheduler.Every(1).Minutes().Run(func() {
-		fmt.Println("Execute every 1 minute\t", time.Now())
-	})
-
-	scheduler.Every().Day().Run(func() {
-		fmt.Println("Execute every 1 day\t", time.Now())
-	})
-
-	scheduler.Every().Sunday().At("08:30").Run(func() {
-		fmt.Println("Execute every Sunday 08:30\t", time.Now())
-	})
-
-	done := make(chan struct{})
-
-	<-done
+	router.Run(":8000")
 }
