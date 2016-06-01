@@ -9,33 +9,13 @@ import (
 	"github.com/miclle/observer/util/mgoutil"
 )
 
-// TaskMgr struct
-type TaskMgr struct {
+// taskMgr struct
+type taskMgr struct {
 	coll *mgo.Collection
 }
 
-// NewTaskMgr return a observer task manager
-func NewTaskMgr(host, name, mode string) (*TaskMgr, error) {
-
-	session := mgoutil.Open(&mgoutil.Config{
-		Host: host,
-		DB:   name,
-		Mode: mode,
-		Coll: "observer_tasks",
-	})
-
-	if err := session.Coll.EnsureIndex(mgo.Index{Key: []string{"name"}, Unique: true}); err != nil {
-		return nil, err
-	}
-
-	if err := session.Coll.EnsureIndex(mgo.Index{Key: []string{"url"}, Unique: true}); err != nil {
-		return nil, err
-	}
-	return &TaskMgr{coll: session.Coll}, nil
-}
-
 // List return a detector task instances array
-func (mgr *TaskMgr) List() (tasks []Task, err error) {
+func (mgr *taskMgr) List() (tasks []Task, err error) {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
@@ -45,7 +25,7 @@ func (mgr *TaskMgr) List() (tasks []Task, err error) {
 }
 
 // Create is create detector taks func
-func (mgr *TaskMgr) Create(task *Task) error {
+func (mgr *taskMgr) Create(task *Task) error {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
@@ -57,7 +37,7 @@ func (mgr *TaskMgr) Create(task *Task) error {
 }
 
 // Find return a detector task instance
-func (mgr *TaskMgr) Find(args *TaskArgs) (task Task, err error) {
+func (mgr *taskMgr) Find(args *TaskArgs) (task Task, err error) {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
@@ -76,7 +56,7 @@ func (mgr *TaskMgr) Find(args *TaskArgs) (task Task, err error) {
 }
 
 // Update is update task func
-func (mgr *TaskMgr) Update(task *Task) error {
+func (mgr *taskMgr) Update(task *Task) error {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 	task.UpdatedAt = time.Now().UTC()
@@ -84,7 +64,7 @@ func (mgr *TaskMgr) Update(task *Task) error {
 }
 
 // Delete is remove task by name
-func (mgr *TaskMgr) Delete(args *TaskArgs) error {
+func (mgr *taskMgr) Delete(args *TaskArgs) error {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 
@@ -102,7 +82,7 @@ func (mgr *TaskMgr) Delete(args *TaskArgs) error {
 }
 
 // DeleteAll is remove all task
-func (mgr *TaskMgr) DeleteAll() (err error) {
+func (mgr *taskMgr) DeleteAll() (err error) {
 	coll := mgoutil.FastCopyCollection(mgr.coll)
 	defer mgoutil.CloseCollection(coll)
 	_, err = coll.RemoveAll(bson.M{})

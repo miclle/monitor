@@ -7,8 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var taskMgr *TaskMgr
-
 func TestNewTaskMgr(t *testing.T) {
 	assert := assert.New(t)
 
@@ -17,20 +15,20 @@ func TestNewTaskMgr(t *testing.T) {
 	mode := "strong"
 
 	var err error
-	taskMgr, err = NewTaskMgr(host, name, mode)
+	err = Init(host, name, mode)
 	assert.Nil(err)
-	assert.NotNil(taskMgr)
+	assert.NotNil(TaskMgr)
 }
 
 func TestDeleteAll(t *testing.T) {
 	assert := assert.New(t)
-	err := taskMgr.DeleteAll()
+	err := TaskMgr.DeleteAll()
 	assert.Nil(err)
 }
 
 func TestList(t *testing.T) {
 	assert := assert.New(t)
-	tasks, err := taskMgr.List()
+	tasks, err := TaskMgr.List()
 	assert.Nil(err)
 	assert.NotNil(tasks)
 	assert.True(len(tasks) == 0)
@@ -47,14 +45,14 @@ func TestCreate(t *testing.T) {
 		Interval:    time.Minute,
 	}
 
-	err := taskMgr.Create(task)
+	err := TaskMgr.Create(task)
 	assert.Nil(err)
 	assert.NotNil(task)
 
-	err = taskMgr.Create(task)
+	err = TaskMgr.Create(task)
 	assert.NotNil(err)
 
-	tasks, err := taskMgr.List()
+	tasks, err := TaskMgr.List()
 	assert.Nil(err)
 	assert.NotNil(tasks)
 	assert.True(len(tasks) > 0)
@@ -67,7 +65,7 @@ func TestFind(t *testing.T) {
 		Name: "Sample task name",
 	}
 
-	task, err := taskMgr.Find(args)
+	task, err := TaskMgr.Find(args)
 	assert.Nil(err)
 	assert.NotNil(task)
 	assert.NotEmpty(task.ID.Hex())
@@ -76,7 +74,7 @@ func TestFind(t *testing.T) {
 		Name: "Not exsit task name",
 	}
 
-	_, err = taskMgr.Find(args)
+	_, err = TaskMgr.Find(args)
 	assert.NotNil(err)
 }
 
@@ -87,14 +85,14 @@ func TestUpdate(t *testing.T) {
 		Name: "Sample task name",
 	}
 
-	task, err := taskMgr.Find(args)
+	task, err := TaskMgr.Find(args)
 	assert.Nil(err)
 	assert.NotNil(task)
 
 	updateAt := task.UpdatedAt
 
 	task.Description = "Sample task new description"
-	err = taskMgr.Update(&task)
+	err = TaskMgr.Update(&task)
 	assert.Nil(err)
 	assert.True(int64(task.UpdatedAt.Sub(updateAt)) > 0)
 	assert.True(task.Description == "Sample task new description")
@@ -107,6 +105,6 @@ func TestDelete(t *testing.T) {
 		Name: "Sample task name",
 	}
 
-	err := taskMgr.Delete(args)
+	err := TaskMgr.Delete(args)
 	assert.Nil(err)
 }

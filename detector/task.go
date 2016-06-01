@@ -81,7 +81,7 @@ type Job struct {
 func (t *Task) Exec() (resp *http.Response, err error) {
 	client := &Client{
 		Client:   &http.Client{Transport: http.DefaultTransport},
-		Delivery: nil,
+		Delivery: t.Notify,
 	}
 
 	l := xlog.NewLogger()
@@ -178,5 +178,34 @@ func (t *Task) Stop() {
 	if t.Job.ID > 0 {
 		MainCron.Remove(t.Job.ID)
 		t.Job.ID = 0
+	}
+}
+
+// Notify messages
+func (t *Task) Notify(l Logger, start, end time.Time, req *http.Request, resp *http.Response, err error) {
+
+	t.Response.TimeLatency = end.Sub(start)
+
+	if resp != nil {
+		t.Response.StatusCode = resp.StatusCode
+	} else {
+		t.Response.StatusCode = 0
+	}
+
+	if err != nil {
+		t.Response.Message = err.Error()
+	}
+
+	// TODO: writing the response body to task response message field
+	// note: need to limit in length
+
+	// Update the Task to monitor status
+	if err := TaskMgr.Update(t); err != nil {
+		log.Error(err.Error())
+	}
+
+	// 4xx 5xx send a alarm
+	if t.Response.StatusCode/100 == 4 || t.Response.StatusCode/100 == 5 {
+		// TODO
 	}
 }
