@@ -27,9 +27,9 @@ var (
 	reset   = string([]byte{27, 91, 48, 109})
 )
 
-// Start MainCron
-// Start(pool int, concurrent int) (10, 1)
-func Start(v ...int) {
+// StartCron MainCron
+// StartCron(pool int, concurrent int) (10, 1)
+func StartCron(v ...int) {
 	MainCron = cron.New()
 
 	if len(v) > 0 {
@@ -53,13 +53,13 @@ func Start(v ...int) {
 	log.Infof("%s[Godeye Cron] %v Started... %s \n", magenta, time.Now(), reset)
 }
 
-// Stop MainCron
-func Stop() {
-	go StopNow()
+// StopCron MainCron
+func StopCron() {
+	go StopCronNow()
 }
 
-// StopNow MainCron
-func StopNow() {
+// StopCronNow MainCron
+func StopCronNow() {
 	log.Infof("%s[Godeye Cron] %v Stoped... %s \n", magenta, time.Now(), reset)
 	if MainCron != nil {
 		MainCron.Stop()
