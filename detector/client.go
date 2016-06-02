@@ -127,7 +127,7 @@ func (r Client) Do(l *xlog.Logger, req *http.Request) (resp *http.Response, err 
 	start := time.Now()
 
 	if l != nil {
-		req.Header.Set("X-Request-Id", l.ReqId)
+		req.Header.Set("X-Reqid", l.ReqId)
 	}
 
 	if req.Header.Get("User-Agent") == "" {
