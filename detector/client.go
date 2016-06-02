@@ -1,8 +1,6 @@
 package detector
 
 import (
-	"bytes"
-	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
@@ -110,16 +108,6 @@ func (r Client) PostWithForm(l *xlog.Logger, url1 string, data map[string][]stri
 
 	msg := url.Values(data).Encode()
 	return r.PostWith(l, url1, "application/x-www-form-urlencoded", strings.NewReader(msg), len(msg))
-}
-
-// PostWithJSON send http post request, Content-Type: application/json
-func (r Client) PostWithJSON(l *xlog.Logger, url1 string, data interface{}) (resp *http.Response, err error) {
-
-	msg, err := json.Marshal(data)
-	if err != nil {
-		return
-	}
-	return r.PostWith(l, url1, "application/json", bytes.NewReader(msg), len(msg))
 }
 
 // Do the http request
