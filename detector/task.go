@@ -95,7 +95,7 @@ func (t *Task) Exec() (resp *http.Response, err error) {
 				data[k] = []string{v}
 			}
 			msg := url.Values(data).Encode()
-			resp, err = client.PostWith(l, t.URL, "application/x-www-form-urlencoded", strings.NewReader(msg), len(msg))
+			resp, err = client.PostWith(l, t.URL, t.ContentType, strings.NewReader(msg), len(msg))
 
 		} else {
 			resp, err = client.PostWith(l, t.URL, t.ContentType, strings.NewReader(t.Body), len(t.Body))
