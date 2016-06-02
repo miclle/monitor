@@ -23,7 +23,7 @@ func TestTask(t *testing.T) {
 		Name:        "TestTask",
 		Description: "This is test task description",
 		Interval:    time.Second,
-		URL:         "https://api.github.com",
+		URL:         "https://github.com",
 		Method:      "GET",
 	}
 
