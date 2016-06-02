@@ -3,6 +3,7 @@ package detector
 import (
 	"bytes"
 	"net/http"
+	"net/url"
 	"runtime/debug"
 	"strings"
 	"sync"
@@ -87,27 +88,25 @@ func (t *Task) Exec() (resp *http.Response, err error) {
 	l := xlog.New(uuid.NewV4().String())
 
 	switch t.Method {
-
-	case "HEAD":
-		resp, err = client.Head(l, t.URL)
-
-	case "GET":
-		resp, err = client.Get(l, t.URL)
-
-	case "DELETE":
-		resp, err = client.Delete(l, t.URL)
-
-	case "POST":
-		switch t.ContentType {
-		case "application/x-www-form-urlencoded":
+	case "POST", "PUT":
+		if t.ContentType == "application/x-www-form-urlencoded" {
 			data := make(map[string][]string)
 			for k, v := range t.BodyForm {
 				data[k] = []string{v}
 			}
-			resp, err = client.PostWithForm(l, t.URL, data)
-		default:
+			msg := url.Values(data).Encode()
+			resp, err = client.PostWith(l, t.URL, "application/x-www-form-urlencoded", strings.NewReader(msg), len(msg))
+
+		} else {
 			resp, err = client.PostWith(l, t.URL, t.ContentType, strings.NewReader(t.Body), len(t.Body))
 		}
+
+	default:
+		req, err := http.NewRequest(t.Method, t.URL, nil)
+		if err != nil {
+			return nil, err
+		}
+		resp, err = client.Do(l, req)
 	}
 
 	return nil, nil

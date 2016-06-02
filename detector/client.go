@@ -3,8 +3,6 @@ package detector
 import (
 	"io"
 	"net/http"
-	"net/url"
-	"strings"
 	"time"
 
 	"qiniupkg.com/x/xlog.v7"
@@ -49,46 +47,6 @@ func (r Client) deliver(l *xlog.Logger, start time.Time, req *http.Request, resp
 
 // --------------------------------------------------------------------
 
-// Head send http head request
-func (r Client) Head(l *xlog.Logger, url string) (resp *http.Response, err error) {
-
-	req, err := http.NewRequest("HEAD", url, nil)
-	if err != nil {
-		return
-	}
-	return r.Do(l, req)
-}
-
-// Get send http get request
-func (r Client) Get(l *xlog.Logger, url string) (resp *http.Response, err error) {
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return
-	}
-	return r.Do(l, req)
-}
-
-// Delete send http delete request
-func (r Client) Delete(l *xlog.Logger, url string) (resp *http.Response, err error) {
-
-	req, err := http.NewRequest("DELETE", url, nil)
-	if err != nil {
-		return
-	}
-	return r.Do(l, req)
-}
-
-// Post send http post request, no Content-Type set
-func (r Client) Post(l *xlog.Logger, url string) (resp *http.Response, err error) {
-
-	req, err := http.NewRequest("POST", url, nil)
-	if err != nil {
-		return
-	}
-	return r.Do(l, req)
-}
-
 // PostWith send http post request
 func (r Client) PostWith(l *xlog.Logger, url1 string, bodyType string, body io.Reader, bodyLength int) (resp *http.Response, err error) {
 
@@ -101,13 +59,6 @@ func (r Client) PostWith(l *xlog.Logger, url1 string, bodyType string, body io.R
 	}
 	req.ContentLength = int64(bodyLength)
 	return r.Do(l, req)
-}
-
-// PostWithForm send http post form request
-func (r Client) PostWithForm(l *xlog.Logger, url1 string, data map[string][]string) (resp *http.Response, err error) {
-
-	msg := url.Values(data).Encode()
-	return r.PostWith(l, url1, "application/x-www-form-urlencoded", strings.NewReader(msg), len(msg))
 }
 
 // Do the http request
