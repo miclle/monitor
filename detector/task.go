@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/miclle/observer/xlog"
-
+	"github.com/satori/go.uuid"
 	"qiniupkg.com/x/log.v7"
+	"qiniupkg.com/x/xlog.v7"
 
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/robfig/cron.v2"
@@ -84,7 +84,7 @@ func (t *Task) Exec() (resp *http.Response, err error) {
 		Delivery: t.Notify,
 	}
 
-	l := xlog.NewLogger()
+	l := xlog.New(uuid.NewV4().String())
 
 	switch t.Method {
 
@@ -182,7 +182,7 @@ func (t *Task) Stop() {
 }
 
 // Notify messages
-func (t *Task) Notify(l Logger, start, end time.Time, req *http.Request, resp *http.Response, err error) {
+func (t *Task) Notify(l *xlog.Logger, start, end time.Time, req *http.Request, resp *http.Response, err error) {
 
 	t.Response.TimeLatency = end.Sub(start)
 

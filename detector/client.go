@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"qiniupkg.com/x/xlog.v7"
 )
 
 // UserAgent Info
@@ -16,7 +18,7 @@ var UserAgent = "Observer detector package"
 // --------------------------------------------------------------------
 
 // Delivery func after the completion of the request triggering method
-type Delivery func(l Logger, start, end time.Time, req *http.Request, resp *http.Response, err error)
+type Delivery func(l *xlog.Logger, start, end time.Time, req *http.Request, resp *http.Response, err error)
 
 // --------------------------------------------------------------------
 
@@ -40,7 +42,7 @@ func NewClientTimeout(dial, resp time.Duration, delivery Delivery) Client {
 // --------------------------------------------------------------------
 
 // deliver call the delivery method after the http do method execute complete
-func (r Client) deliver(l Logger, start time.Time, req *http.Request, resp *http.Response, err error) {
+func (r Client) deliver(l *xlog.Logger, start time.Time, req *http.Request, resp *http.Response, err error) {
 	end := time.Now()
 	if r.Delivery != nil {
 		r.Delivery(l, start, end, req, resp, err)
@@ -49,15 +51,8 @@ func (r Client) deliver(l Logger, start time.Time, req *http.Request, resp *http
 
 // --------------------------------------------------------------------
 
-// Logger Interface
-type Logger interface {
-	XRequestID() string
-}
-
-// --------------------------------------------------------------------
-
 // Head send http head request
-func (r Client) Head(l Logger, url string) (resp *http.Response, err error) {
+func (r Client) Head(l *xlog.Logger, url string) (resp *http.Response, err error) {
 
 	req, err := http.NewRequest("HEAD", url, nil)
 	if err != nil {
@@ -67,7 +62,7 @@ func (r Client) Head(l Logger, url string) (resp *http.Response, err error) {
 }
 
 // Get send http get request
-func (r Client) Get(l Logger, url string) (resp *http.Response, err error) {
+func (r Client) Get(l *xlog.Logger, url string) (resp *http.Response, err error) {
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -77,7 +72,7 @@ func (r Client) Get(l Logger, url string) (resp *http.Response, err error) {
 }
 
 // Delete send http delete request
-func (r Client) Delete(l Logger, url string) (resp *http.Response, err error) {
+func (r Client) Delete(l *xlog.Logger, url string) (resp *http.Response, err error) {
 
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
@@ -87,7 +82,7 @@ func (r Client) Delete(l Logger, url string) (resp *http.Response, err error) {
 }
 
 // Post send http post request, no Content-Type set
-func (r Client) Post(l Logger, url string) (resp *http.Response, err error) {
+func (r Client) Post(l *xlog.Logger, url string) (resp *http.Response, err error) {
 
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
@@ -97,7 +92,7 @@ func (r Client) Post(l Logger, url string) (resp *http.Response, err error) {
 }
 
 // PostWith send http post request
-func (r Client) PostWith(l Logger, url1 string, bodyType string, body io.Reader, bodyLength int) (resp *http.Response, err error) {
+func (r Client) PostWith(l *xlog.Logger, url1 string, bodyType string, body io.Reader, bodyLength int) (resp *http.Response, err error) {
 
 	req, err := http.NewRequest("POST", url1, body)
 	if err != nil {
@@ -111,14 +106,14 @@ func (r Client) PostWith(l Logger, url1 string, bodyType string, body io.Reader,
 }
 
 // PostWithForm send http post form request
-func (r Client) PostWithForm(l Logger, url1 string, data map[string][]string) (resp *http.Response, err error) {
+func (r Client) PostWithForm(l *xlog.Logger, url1 string, data map[string][]string) (resp *http.Response, err error) {
 
 	msg := url.Values(data).Encode()
 	return r.PostWith(l, url1, "application/x-www-form-urlencoded", strings.NewReader(msg), len(msg))
 }
 
 // PostWithJSON send http post request, Content-Type: application/json
-func (r Client) PostWithJSON(l Logger, url1 string, data interface{}) (resp *http.Response, err error) {
+func (r Client) PostWithJSON(l *xlog.Logger, url1 string, data interface{}) (resp *http.Response, err error) {
 
 	msg, err := json.Marshal(data)
 	if err != nil {
@@ -128,11 +123,11 @@ func (r Client) PostWithJSON(l Logger, url1 string, data interface{}) (resp *htt
 }
 
 // Do the http request
-func (r Client) Do(l Logger, req *http.Request) (resp *http.Response, err error) {
+func (r Client) Do(l *xlog.Logger, req *http.Request) (resp *http.Response, err error) {
 	start := time.Now()
 
 	if l != nil {
-		req.Header.Set("X-Request-Id", l.XRequestID())
+		req.Header.Set("X-Request-Id", l.ReqId)
 	}
 
 	if req.Header.Get("User-Agent") == "" {
