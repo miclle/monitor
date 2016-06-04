@@ -1,20 +1,30 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
+
+	"github.com/miclle/observer/config"
 	"github.com/miclle/observer/detector"
-	"qiniupkg.com/x/log.v7"
 )
 
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	// log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stderr instead of stdout, could also be a file.
+	log.SetOutput(os.Stderr)
+}
+
 func main() {
+
+	config.Init("config.yml")
+	detector.Init(config.Config.Mongo.Host, config.Config.Mongo.Name, config.Config.Mongo.Mode)
+
 	router := gin.Default()
-
-	host := "127.0.0.1:27017"
-	name := "observer_test"
-	mode := "strong"
-
-	detector.Init(host, name, mode)
-
 	// Monitor
 	router.GET("/tasks", func(c *gin.Context) {
 		tasks, err := detector.TaskMgr.List()
@@ -28,5 +38,5 @@ func main() {
 		c.JSON(200, gin.H{"tasks": tasks})
 	})
 
-	router.Run(":8000")
+	router.Run(fmt.Sprintf(":%d", config.Config.Port))
 }

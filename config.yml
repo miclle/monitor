@@ -1,0 +1,6 @@
+# Be sure to restart observer when you modify this file.
+port: 8080
+mongo:
+  host: "127.0.0.1:27017"
+  name: "observer"
+  mode: "strong"
