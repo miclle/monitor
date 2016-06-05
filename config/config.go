@@ -9,11 +9,11 @@ import (
 
 // config struct
 type config struct {
-	Port  int `yaml:"app"`
+	Port  int `yaml:"port"`
 	Mongo struct {
-		Host string
-		Name string
-		Mode string
+		Host string `yaml:"host"`
+		Name string `yaml:"name"`
+		Mode string `yaml:"mode"`
 	}
 }
 
