@@ -21,8 +21,7 @@ func init() {
 
 func main() {
 
-	config.Init("config.yml")
-	detector.Init(config.Config.Mongo.Host, config.Config.Mongo.Name, config.Config.Mongo.Mode)
+	detector.Init(config.Mongo.Host, config.Mongo.Name, config.Mongo.Mode)
 
 	router := gin.Default()
 	// Monitor
@@ -38,5 +37,5 @@ func main() {
 		c.JSON(200, gin.H{"tasks": tasks})
 	})
 
-	router.Run(fmt.Sprintf(":%d", config.Config.Port))
+	router.Run(fmt.Sprintf(":%d", config.Port))
 }
