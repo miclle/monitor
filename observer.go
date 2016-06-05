@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"os"
 
+	"github.com/GeertJohan/go.rice"
 	log "github.com/Sirupsen/logrus"
+	"github.com/gin-gonic/contrib/renders/multitemplate"
 	"github.com/gin-gonic/gin"
 
 	"github.com/miclle/observer/config"
@@ -24,6 +27,30 @@ func main() {
 	detector.Init(config.Mongo.Host, config.Mongo.Name, config.Mongo.Mode)
 
 	router := gin.Default()
+	render := multitemplate.New()
+
+	templateBox := rice.MustFindBox("templates")
+
+	templateBox.Walk("", func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			templateString := templateBox.MustString(path)
+			tmplMessage, err := template.New(path).Parse(templateString)
+			if err != nil {
+				return err
+			}
+			render.Add(path, tmplMessage)
+		}
+		return nil
+	})
+
+	router.HTMLRender = render
+
+	router.StaticFS("/assets", rice.MustFindBox("assets").HTTPBox())
+
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(200, "index.html", gin.H{})
+	})
+
 	// Monitor
 	router.GET("/tasks", func(c *gin.Context) {
 		tasks, err := detector.TaskMgr.List()
